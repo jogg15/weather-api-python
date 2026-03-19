@@ -1,6 +1,6 @@
 import aiohttp
 import time
-from typing import Optional, Dict, Any
+from typing import Dict, Optional, Any
 from exceptions import WeatherAPIError, UnauthorizedError, CityNotFoundError
 
 class WeatherClient:
@@ -19,9 +19,9 @@ class WeatherClient:
         if self._session:
             await self._session.close()
 
-     async def get_weather(self, city: str, units: str = "metric") -> Dict[str, Any]:
+    async def get_weather(self, city: str, units: str = "metric") -> Dict[str, Any]:
         cache_key = f"{city.lower()}_{units}"
-
+        
         if cache_key in self._cache:
             timestamp, data = self._cache[cache_key]
             if time.time() - timestamp < self.cache_ttl:
@@ -29,8 +29,8 @@ class WeatherClient:
 
         params = {
             "q": city,
-            "units": units,
-            "appid": self.api_key
+            "appid": self.api_key,
+            "units": units
         }
 
         try:
